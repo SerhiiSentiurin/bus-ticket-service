@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Serhii_Sentiurin
+      changes:
+        - createTable:
+            tableName: routes
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: departure_city
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: arrival_city
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: departure_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: departure_time
+                  type: TIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cost
+                  type: DECIMAL
+                  constraints:
+                    nullable: false
+              - column:
+                  name: available_seats
+                  type: INTEGER
+                  constraints:
+                    nullable: false
