@@ -13,10 +13,9 @@ public class TicketController {
 
     private final TicketService ticketService;
 
-    @PostMapping("/{routeId}")
-    public Long buyTicket(@RequestBody ClientDto dto,
-                          @PathVariable Long routeId) {
-        return ticketService.buyTicket(dto, routeId);
+    @PostMapping("/buy")
+    public Long buyTicket(@RequestBody ClientDto dto) {
+        return ticketService.buyTicket(dto);
     }
 
     @GetMapping

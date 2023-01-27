@@ -8,4 +8,5 @@ public class ClientDto {
     private String lastName;
     private String patronymic;
     private Double amount;
+    private Long routeId;
 }

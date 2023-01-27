@@ -13,31 +13,10 @@ import java.time.LocalDateTime;
 public class AppExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<ExceptionResponseDto> handleException(NoAvailableSeatsException exception) {
+    public ResponseEntity<ExceptionResponseDto> handleException(AppException exception) {
         ExceptionResponseDto exceptionResponseDto = new ExceptionResponseDto(HttpStatus.NOT_FOUND.value(), exception.getMessage(), LocalDateTime.now());
         log.error(exception.getMessage(), exception);
         return new ResponseEntity<>(exceptionResponseDto, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ExceptionResponseDto> handleException(RouteNotFoundException exception) {
-        ExceptionResponseDto exceptionResponseDto = new ExceptionResponseDto(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), LocalDateTime.now());
-        log.error(exception.getMessage(), exception);
-        return new ResponseEntity<>(exceptionResponseDto, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ExceptionResponseDto> handleException(TicketNotFoundException exception) {
-        ExceptionResponseDto exceptionResponseDto = new ExceptionResponseDto(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), LocalDateTime.now());
-        log.error(exception.getMessage(), exception);
-        return new ResponseEntity<>(exceptionResponseDto, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ExceptionResponseDto> handleException(MoneyException exception) {
-        ExceptionResponseDto exceptionResponseDto = new ExceptionResponseDto(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), LocalDateTime.now());
-        log.error(exception.getMessage(), exception);
-        return new ResponseEntity<>(exceptionResponseDto, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler
     public ResponseEntity<?> handleException(Exception exception) {
