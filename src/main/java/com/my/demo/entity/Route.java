@@ -11,8 +11,6 @@ import java.time.LocalTime;
 
 @Table("routes")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Route {
     @Id
     private Long id;
