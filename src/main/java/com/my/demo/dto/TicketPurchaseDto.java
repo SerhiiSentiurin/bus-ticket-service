@@ -3,7 +3,7 @@ package com.my.demo.dto;
 import lombok.Data;
 
 @Data
-public class ClientDto {
+public class TicketPurchaseDto {
     private String firstName;
     private String lastName;
     private String patronymic;

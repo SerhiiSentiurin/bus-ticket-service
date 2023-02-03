@@ -1,6 +1,6 @@
 package com.my.demo.communicator;
 
-import com.my.demo.dto.ClientDto;
+import com.my.demo.dto.TicketPurchaseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -10,12 +10,11 @@ import org.springframework.web.client.RestTemplate;
 public class RestCommunicator {
     private final RestTemplate restTemplate;
 
-    private static final String CREATE_PAYMENT_POST_URL = "http://localhost:8080/payments/create";
-    private static final String FIND_PAYMENT_STATUS_GET_URL = "http://localhost:8080/payments/statuses?id=";
-    private static final String FIND_FAILED_AND_NEW_STATUSES_GET_URL = "http://localhost:8080/payments/statuses/bad";
-    private static final String UPDATE_STATUSES_PUT_URL = "http://localhost:8080/payments/statuses";
+    private static final String CREATE_PAYMENT_POST_URL = "/create";
+    private static final String FIND_PAYMENT_STATUS_GET_URL = "/statuses?id=";
 
-    public Long createPayment(ClientDto dto){
+
+    public Long createPayment(TicketPurchaseDto dto){
         return restTemplate.postForObject(CREATE_PAYMENT_POST_URL, dto, Long.class);
     }
 

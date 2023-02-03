@@ -3,12 +3,13 @@ package com.my.demo.service;
 import com.my.demo.communicator.RestCommunicator;
 import com.my.demo.repository.RouteRepository;
 import com.my.demo.repository.TicketRepository;
-import com.my.demo.dto.ClientDto;
+import com.my.demo.dto.TicketPurchaseDto;
 import com.my.demo.entity.Route;
 import com.my.demo.entity.Ticket;
 import com.my.demo.exception.MoneyException;
 import com.my.demo.exception.NoAvailableSeatsException;
 import com.my.demo.exception.RouteNotFoundException;
+import com.my.demo.util.PaymentIdSaver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ public class TicketBookingService {
     private final RestCommunicator restCommunicator;
 
     @Transactional
-    public Long buyTicket(ClientDto dto) {
+    public Long buyTicket(TicketPurchaseDto dto) {
         Route route = checkAndFindRoute(dto);
         route.setAvailableSeats(route.getAvailableSeats() - 1);
         routeRepository.save(route);
@@ -35,10 +36,12 @@ public class TicketBookingService {
                 .paymentId(paymentId)
                 .routeId(route.getId())
                 .build();
+        PaymentIdSaver.saveId(paymentId);
         return ticketRepository.save(ticket).getId();
+
     }
 
-    private Route checkAndFindRoute(ClientDto dto) {
+    private Route checkAndFindRoute(TicketPurchaseDto dto) {
         Route route = routeRepository.findById(dto.getRouteId()).orElseThrow(() -> new RouteNotFoundException("Route not found!"));
         if (route.getAvailableSeats() <= 0) {
             throw new NoAvailableSeatsException("No available seats!");
