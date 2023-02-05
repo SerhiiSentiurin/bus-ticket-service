@@ -1,7 +1,8 @@
 package com.my.demo.service;
 
-import com.my.demo.communicator.RestCommunicator;
+import com.my.demo.client.PaymentServiceClient;
 import com.my.demo.dto.TicketInfoDto;
+import com.my.demo.entity.PaymentStatus;
 import com.my.demo.entity.Route;
 import com.my.demo.entity.Ticket;
 import com.my.demo.exception.RouteNotFoundException;
@@ -18,13 +19,13 @@ public class TicketInfoService {
 
     private final RouteRepository routeRepository;
     private final TicketRepository ticketRepository;
-    private final RestCommunicator restCommunicator;
+    private final PaymentServiceClient paymentServiceClient;
 
     public TicketInfoDto getTicketInfo(Long ticketId) {
         Ticket ticket = ticketRepository.findById(ticketId).orElseThrow(() -> new TicketNotFoundException("Ticket not found!"));
         Route route = routeRepository.findById(ticket.getRouteId()).orElseThrow(() -> new RouteNotFoundException("Route not found!"));
         Long paymentId = ticket.getPaymentId();
-        String paymentStatus = restCommunicator.getPaymentStatusById(paymentId);
+        PaymentStatus paymentStatus = paymentServiceClient.getPaymentStatusById(paymentId);
         return TicketInfoDto.builder()
                 .departureCity(route.getDepartureCity())
                 .arrivalCity(route.getArrivalCity())

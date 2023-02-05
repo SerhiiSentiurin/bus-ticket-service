@@ -1,19 +1,17 @@
 package com.my.demo.service;
 
-import com.my.demo.communicator.RestCommunicator;
+import com.my.demo.client.PaymentServiceClient;
 import com.my.demo.repository.RouteRepository;
 import com.my.demo.repository.TicketRepository;
-import com.my.demo.dto.TicketPurchaseDto;
+import com.my.demo.dto.TicketBookingDto;
 import com.my.demo.entity.Route;
 import com.my.demo.entity.Ticket;
-import com.my.demo.exception.MoneyException;
+import com.my.demo.exception.NotEnoughFoundsException;
 import com.my.demo.exception.NoAvailableSeatsException;
 import com.my.demo.exception.RouteNotFoundException;
-import com.my.demo.util.PaymentIdSaver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 
 @Service
@@ -21,14 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class TicketBookingService {
     private final RouteRepository routeRepository;
     private final TicketRepository ticketRepository;
-    private final RestCommunicator restCommunicator;
+    private final PaymentServiceClient paymentServiceClient;
 
     @Transactional
-    public Long buyTicket(TicketPurchaseDto dto) {
+    public Long buyTicket(TicketBookingDto dto) {
         Route route = checkAndFindRoute(dto);
         route.setAvailableSeats(route.getAvailableSeats() - 1);
-        routeRepository.save(route);
-        Long paymentId = restCommunicator.createPayment(dto);
+        Long paymentId = paymentServiceClient.createPayment(dto);
         Ticket ticket = Ticket.builder()
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
@@ -36,21 +33,20 @@ public class TicketBookingService {
                 .paymentId(paymentId)
                 .routeId(route.getId())
                 .build();
-        PaymentIdSaver.saveId(paymentId);
+        routeRepository.save(route);
         return ticketRepository.save(ticket).getId();
-
     }
 
-    private Route checkAndFindRoute(TicketPurchaseDto dto) {
+    private Route checkAndFindRoute(TicketBookingDto dto) {
         Route route = routeRepository.findById(dto.getRouteId()).orElseThrow(() -> new RouteNotFoundException("Route not found!"));
         if (route.getAvailableSeats() <= 0) {
             throw new NoAvailableSeatsException("No available seats!");
         }
         if (dto.getAmount() > route.getCost()) {
-            throw new MoneyException("Too much money, ticket cost is : " + route.getCost());
+            throw new NotEnoughFoundsException("Too much money, ticket cost is : " + route.getCost());
         }
         if (dto.getAmount() < route.getCost()) {
-            throw new MoneyException("Not enough money, ticket cost is : " + route.getCost());
+            throw new NotEnoughFoundsException("Not enough money, ticket cost is : " + route.getCost());
         }
         return route;
     }

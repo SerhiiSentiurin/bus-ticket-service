@@ -1,5 +1,6 @@
 package com.my.demo.dto;
 
+import com.my.demo.entity.PaymentStatus;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,5 +15,5 @@ public class TicketInfoDto {
     private LocalDate departureDate;
     private LocalTime departureTime;
     private Double cost;
-    private String status;
+    private PaymentStatus status;
 }

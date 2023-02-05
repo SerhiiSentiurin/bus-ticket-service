@@ -1,9 +1,11 @@
 package com.my.demo.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class TicketPurchaseDto {
+@Builder(toBuilder = true)
+public class TicketBookingDto {
     private String firstName;
     private String lastName;
     private String patronymic;

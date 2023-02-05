@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class TicketInfoController {
 
     private final TicketInfoService ticketInfoService;
+
     @GetMapping("/info")
-    public TicketInfoDto getTicketInfo (@RequestParam Long ticketId){
+    public TicketInfoDto getTicketInfo(@RequestParam Long ticketId) {
         return ticketInfoService.getTicketInfo(ticketId);
     }
 }
